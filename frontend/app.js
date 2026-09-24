@@ -1138,7 +1138,7 @@ const startGameMqttListener = () => {
   if (gameMqttClient || typeof window.mqtt === "undefined") return;
 
   const env = window.__ENV__ || {};
-  const prefix = (env.MQTT_MESSAGE_PREFIX || "group-03/").replace(/\/*$/, "/");
+  const prefix = (env.MQTT_MESSAGE_PREFIX || "quiz-local/").replace(/\/*$/, "/");
   const stateTopic = `${prefix}game/state`;
   const countdownTopic = `${prefix}game/countdown`;
   const questionTopic = `${prefix}game/question`;
@@ -1151,8 +1151,8 @@ const startGameMqttListener = () => {
   const brokerUrl = `ws://${brokerHost}:${brokerPort}`;
 
   gameMqttClient = window.mqtt.connect(brokerUrl, {
-    username: env.MQTT_USERNAME || "group-03",
-    password: env.MQTT_PASSWORD || "efKgxXw5dE.(",
+    username: env.MQTT_USERNAME || "quiz-local",
+    password: env.MQTT_PASSWORD || "change-me-mqtt",
     clientId: `frontend-game-${Math.random().toString(16).slice(2, 10)}`,
     clean: true,
     reconnectPeriod: 2000,
@@ -1991,7 +1991,7 @@ const getNextAvailableBot = (players) => {
 // Bot anlegen, einloggen, verbinden und automatisch in die Lobby setzen
 const addBot = async () => {
   const env = window.__ENV__ || {};
-  const prefix = (env.MQTT_MESSAGE_PREFIX || "group-03/").replace(/\/*$/, "/");
+  const prefix = (env.MQTT_MESSAGE_PREFIX || "quiz-local/").replace(/\/*$/, "/");
   const brokerHost = env.MQTT_BROKER_URL || window.location.hostname;
   const brokerPort = env.MQTT_BROKER_PORT || "9001";
   const brokerUrl = `ws://${brokerHost}:${brokerPort}`;
@@ -2048,8 +2048,8 @@ const addBot = async () => {
     const botCtrlId = `BOT-${bot.username.toUpperCase()}-${Math.random().toString(16).slice(2, 6).toUpperCase()}`;
 
     const botMqtt = window.mqtt.connect(brokerUrl, {
-      username: env.MQTT_USERNAME || "group-03",
-      password: env.MQTT_PASSWORD || "efKgxXw5dE.(",
+      username: env.MQTT_USERNAME || "quiz-local",
+      password: env.MQTT_PASSWORD || "change-me-mqtt",
       clientId: `bot-${botCtrlId}`,
       clean: true,
       reconnectPeriod: 2000,

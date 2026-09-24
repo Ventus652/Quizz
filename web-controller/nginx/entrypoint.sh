@@ -12,5 +12,7 @@ window.__ENV__ = {
 };
 EOF
 
+exec /docker-entrypoint.sh nginx -g 'daemon off;'
+
 # Starte NGINX
 nginx -g 'daemon off;'

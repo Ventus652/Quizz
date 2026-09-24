@@ -57,7 +57,7 @@ public class MainVerticle extends AbstractVerticle {
                 .put("DB_PORT", System.getenv("DB_PORT") != null ? Integer.parseInt(System.getenv("DB_PORT")) : 3306)
                 .put("DB_NAME", System.getenv("DB_NAME") != null ? System.getenv("DB_NAME") : "game")
                 .put("DB_USER", System.getenv("DB_USER") != null ? System.getenv("DB_USER") : "user")
-                .put("DB_PASSWORD", System.getenv("DB_PASSWORD") != null ? System.getenv("DB_PASSWORD") : "userpassword");
+                .put("DB_PASSWORD", System.getenv("DB_PASSWORD") != null ? System.getenv("DB_PASSWORD") : "change-me-db");
 
         DatabaseClient.initialize(vertx, config);
     }

@@ -54,7 +54,7 @@ Zum Testen zu zweit (ein Rechner = Lobby/Spielsteuerung, anderer = Controller):
 
 ## Umgebungsvariablen
 
-- **MQTT:** Broker-URL, Port, Benutzername, Passwort, Topic-Präfix (`MQTT_MESSAGE_PREFIX`, z. B. `group-03/`). Werte in `.env` bzw. `docker-compose.yml`.
+- **MQTT:** Broker-URL, Port, Benutzername, Passwort, Topic-Präfix (`MQTT_MESSAGE_PREFIX`, z. B. `quiz-local/`). Werte in `.env` bzw. `docker-compose.yml`.
 - **DB:** Host, User, Passwort, Datenbankname, Port (z. B. `DB_HOST=mariadb`, `DB_PORT=3306`).
 - Für Tests von außerhalb (z. B. Freund): Auf dem Host ggf. `MQTT_BROKER_URL` so setzen, dass Clients die erreichbare Host-IP nutzen können; Frontend und Web-Controller können per Nginx/Entrypoint mit Umgebungsvariablen injiziert werden (siehe jeweilige Konfiguration).
 

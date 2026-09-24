@@ -128,11 +128,11 @@ Payload-Beispiel:
 - **Debouncing**: Button-Entprellung mindestens 50ms
 - **MQTT**: Reconnect-Logik bei Verbindungsabbruch, Debug-Ausgaben per Serial
 
-**Hardware Controller werden über das MICRO-Remote-Labor bereitgestellt und stehen Ihnen nur innerhalb des VPN unter der nutzung des öffentlichen MQTT-Brokers (iti-mqtt.mni.thm.de) zur Verfügung**
+**Hardware Controller werden über das MICRO-Remote-Labor bereitgestellt und stehen Ihnen nur innerhalb des VPN unter der nutzung des öffentlichen your-wifi-ssids (localhost) zur Verfügung**
 
 - **MQTT**
   - Lokal (Entwicklung): MQTT Broker per Docker Compose (localhost:1883/9001)
-  - Hardware-Tests: iti-mqtt.mni.thm.de:1883/9001 (TLS, nur im VPN erreichbar)
+  - Hardware-Tests: localhost:1883/9001 (TLS, nur im VPN erreichbar)
   - Umschalter: Env-Variable MQTT_BROKER_HOST
 
 

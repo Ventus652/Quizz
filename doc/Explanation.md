@@ -70,7 +70,7 @@ Thus, the following connections are in use:
 After installing the [`mosquitto-clients`](https://mosquitto.org/download/) (and replacing the `test` values with those found in your `mqtt_credentials.txt`), you may run the following command to test you connection:
 
 ```sh
-mosquitto_sub -h iti-mqtt.mni.thm.de -p 1883 -u test -P test1234 -t "test/#" -v -d
+mosquitto_sub -h localhost -p 1883 -u test -P test1234 -t "test/#" -v -d
 ```
 
 To simplify uploading to a MICRO station, you also may run the following command, which will create a `.zip`-archive in your current directory, ready to be uploaded.

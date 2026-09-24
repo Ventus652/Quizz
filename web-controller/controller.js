@@ -1,7 +1,7 @@
 const env = window.__ENV__ || {};
-const PREFIX = (env.MQTT_MESSAGE_PREFIX || "group-03/").replace(/\/*$/, "/");
-const USER = env.MQTT_USERNAME || "group-03";
-const PASS = env.MQTT_PASSWORD || "efKgxXw5dE.(";
+const PREFIX = (env.MQTT_MESSAGE_PREFIX || "quiz-local/").replace(/\/*$/, "/");
+const USER = env.MQTT_USERNAME || "quiz-local";
+const PASS = env.MQTT_PASSWORD || "change-me-mqtt";
 const BROKER_HOST = env.MQTT_BROKER_URL || window.location.hostname;
 const BROKER_PORT = env.MQTT_BROKER_PORT || "9001";
 const WS_URL = `ws://${BROKER_HOST}:${BROKER_PORT}`;
