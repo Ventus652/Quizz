@@ -59,11 +59,11 @@ services:
       DB_NAME: ${DB_NAME}
       DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
-      MQTT_BROKER_URL: ${MQTT_BROKER_URL}
+      MQTT_BROKER_URL: mosquitto
       MQTT_BROKER_PORT: 1883
       MQTT_USERNAME: ${MQTT_USERNAME}
       MQTT_PASSWORD: ${MQTT_PASSWORD}
-      MQTT_MESSAGE_PREFIX: group-03/
+      MQTT_MESSAGE_PREFIX: quiz-local/
     depends_on:
       mosquitto:
           condition: service_started
@@ -78,7 +78,7 @@ services:
     container_name: phpmyadmin
     environment:
       PMA_HOST: mariadb
-      MYSQL_ROOT_PASSWORD: game1234!
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
     ports:
       - "8081:80"
     depends_on:
@@ -93,15 +93,17 @@ services:
     volumes:
       - ./frontend/nginx/conf.d:/etc/nginx/conf.d     # Stelle sicher, dass die Konfigurationsdatei vorhanden ist
       - ./frontend:/usr/share/nginx/html              # Frontend-Verzeichnis als Volume
+      - ./frontend/nginx/entrypoint.sh:/frontend-entrypoint.sh:ro
+    entrypoint: ["/bin/sh", "/frontend-entrypoint.sh"]
     ports:
       - "80:80"    # HTTP
       - "443:443"  # HTTPS (konfiguriere SSL entsprechend)
     environment:
-      MQTT_BROKER_URL:      ${MQTT_BROKER_URL}
+      MQTT_BROKER_URL:      ${MQTT_PUBLIC_HOST}
       MQTT_BROKER_PORT:     ${MQTT_BROKER_PORT}
       MQTT_USERNAME:        ${MQTT_USERNAME}
       MQTT_PASSWORD:        ${MQTT_PASSWORD}
-      MQTT_MESSAGE_PREFIX:  group-03/
+      MQTT_MESSAGE_PREFIX:  ${MQTT_MESSAGE_PREFIX}
     restart: unless-stopped
 
 ##################################################################################
@@ -112,17 +114,18 @@ services:
     volumes:
       - ./web-controller/nginx/conf.d:/etc/nginx/conf.d
       - ./web-controller:/usr/share/nginx/html
-      - ./web-controller/nginx/entrypoint.sh:/docker-entrypoint.d/entrypoint.sh
+      - ./web-controller/nginx/entrypoint.sh:/controller-entrypoint.sh:ro
+    entrypoint: ["/bin/sh", "/controller-entrypoint.sh"]
 
     ports:
       - "81:81"    # HTTP
       - "444:443"  # HTTPS (konfiguriere SSL entsprechend)
     environment:
-      MQTT_BROKER_URL:      ${MQTT_BROKER_URL}
+      MQTT_BROKER_URL:      ${MQTT_PUBLIC_HOST}
       MQTT_BROKER_PORT:     ${MQTT_BROKER_PORT}
       MQTT_USERNAME:        ${MQTT_USERNAME}
       MQTT_PASSWORD:        ${MQTT_PASSWORD}
-      MQTT_MESSAGE_PREFIX:  group-03/
+      MQTT_MESSAGE_PREFIX:  ${MQTT_MESSAGE_PREFIX}
     restart: unless-stopped
 
 ##################################################################################

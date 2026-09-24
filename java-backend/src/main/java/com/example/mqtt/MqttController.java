@@ -26,7 +26,7 @@ public class MqttController {
     private final EventBus eventBus;
     private final HeartbeatManager heartbeatManager;
 
-    final String mqttMessagePrefix = System.getenv("MQTT_MESSAGE_PREFIX") != null ? System.getenv("MQTT_MESSAGE_PREFIX") : "group-03/";
+    final String mqttMessagePrefix = System.getenv("MQTT_MESSAGE_PREFIX") != null ? System.getenv("MQTT_MESSAGE_PREFIX") : "quiz-local/";
 
     public MqttController(MqttClient mqttClient, Vertx vertx) {
         this.mqttClient = mqttClient;

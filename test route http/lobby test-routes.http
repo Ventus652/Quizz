@@ -3,8 +3,8 @@
 @contentType = application/json
 
 ### Variables pour les tests (à modifier selon vos besoins)
-@testUsername = lunaa
-@testPassword = securePassword124
+@testUsername = demo_host
+@testPassword = change-me-demo-password
 @testControllerId = web-abc123
 @testControllerType = WEB
 

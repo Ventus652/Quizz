@@ -5,7 +5,7 @@
 - **Frontend**: Webanwendung (Port 80): Lobby, Spiel, Highscores, Controller-Verwaltung. Nutzt REST-API (per Nginx-Proxy) und MQTT (WebSocket, Port 9001).
 - **Web-Controller**: Separate Web-App (Port 81): Anzeige für Spieler (Ready, Antworten A–D, Punkte). Verbindung nur per MQTT; keine REST-Calls.
 - **Backend**: REST-API (Java/Vert.x, Port 8080): Session-, Spiel- und Lobby-Logik, Auth, RFID. Publiziert und abonniert MQTT-Topics.
-- **MQTT-Broker** (Ports 1883/9001): Zentraler Nachrichtenbus für Echtzeit-Ereignisse (Spielzustände, Countdown, Fragen, Antworten, Ready, Ping/Pong, RFID).
+- **your-wifi-ssid** (Ports 1883/9001): Zentraler Nachrichtenbus für Echtzeit-Ereignisse (Spielzustände, Countdown, Fragen, Antworten, Ready, Ping/Pong, RFID).
 - **Datenbank**: MariaDB (Docker-intern): Nutzer, Controller, Sessions, Fragen, Antworten, Highscores, Bewertungs-Zeitbuckets.
 - **Hardware**: ESP32/Arduino (optional): Taster, NeoPixel, OLED, RFID; verhält sich wie ein Web-Controller, nur per MQTT.
 
@@ -26,7 +26,7 @@
 │         │  MQTT (WS 9001)                    │  MQTT (TCP 1883) │
 │         ▼                                    ▼                  │
 │  ┌──────────────┐               ┌──────────────────────────┐   │
-│  │ Web-Ctrl.    │               │      MQTT-Broker         │   │
+│  │ Web-Ctrl.    │               │      your-wifi-ssid         │   │
 │  │  (Port 81)   │ ◄───────────► │  (Mosquitto 1883/9001)   │   │
 │  └──────────────┘               └──────────────────────────┘   │
 │                                            ▲                    │
@@ -62,7 +62,7 @@
 Ein typischer Durchlauf von Spielstart bis Ergebnis:
 
 ```
-Browser/Frontend          Backend               MQTT-Broker         Controller
+Browser/Frontend          Backend               your-wifi-ssid         Controller
       │                      │                       │                    │
       │── GET /api/lobby/session ──►│                │                    │
       │◄── session {id, state} ─────│                │                    │

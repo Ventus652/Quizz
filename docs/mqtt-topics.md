@@ -1,6 +1,6 @@
 # MQTT-Topics
 
-Dokumentation aller MQTT-Topics des Quiz-Spiels: Funktion, Publisher, Subscriber, Payload (JSON). Präfix aller Topics: `group-03/` (konfigurierbar über `MQTT_MESSAGE_PREFIX`). QoS ist durchgehend 0.
+Dokumentation aller MQTT-Topics des Quiz-Spiels: Funktion, Publisher, Subscriber, Payload (JSON). Präfix aller Topics: `quiz-local/` (konfigurierbar über `MQTT_MESSAGE_PREFIX`). QoS ist durchgehend 0.
 
 ---
 
@@ -14,7 +14,7 @@ Topics für Controller-Registrierung, Statusabfrage und Heartbeat (Ping/Pong). C
 
 Meldet einen Controller beim Backend an. Erzeugt oder aktualisiert den Eintrag; danach kann der Controller in der Lobby verwendet werden. Nach erfolgreicher Registrierung publiziert das Backend `controllers/updated` und sendet dem Controller eine Status-Response.
 
-**Topic:** `group-03/controller/register`  
+**Topic:** `quiz-local/controller/register`  
 **Publisher:** Web-Controller, Hardware-Controller, Bots (Frontend).  
 **Subscriber:** Backend.
 
@@ -35,7 +35,7 @@ Meldet einen Controller beim Backend an. Erzeugt oder aktualisiert den Eintrag; 
 
 Fordert den aktuellen Status für einen bestimmten Controller an (Spieler zugeordnet?, Ready?, Punkte). Wird vom Controller nach Registrierung und bei Bedarf (z. B. nach Lobby-Update) aufgerufen. Das Backend antwortet auf das controller-spezifische Response-Topic.
 
-**Topic:** `group-03/controller/status/request`  
+**Topic:** `quiz-local/controller/status/request`  
 **Publisher:** Web-Controller, Hardware, Bots.  
 **Subscriber:** Backend.
 
@@ -46,7 +46,7 @@ Fordert den aktuellen Status für einen bestimmten Controller an (Spieler zugeor
 }
 ```
 
-**Backend-Reaktion:** Publish auf `group-03/controller/{controller_id}/status/response` mit Status-JSON oder Fehler-JSON.
+**Backend-Reaktion:** Publish auf `quiz-local/controller/{controller_id}/status/response` mit Status-JSON oder Fehler-JSON.
 
 ---
 
@@ -54,7 +54,7 @@ Fordert den aktuellen Status für einen bestimmten Controller an (Spieler zugeor
 
 Enthält den aktuellen Lobby-/Spiel-Status für genau einen Controller. Wird nur an den anfragenden Controller gesendet (Topic enthält dessen `controller_id`).
 
-**Topic:** `group-03/controller/{controller_id}/status/response`  
+**Topic:** `quiz-local/controller/{controller_id}/status/response`  
 **Publisher:** Backend (als Antwort auf `controller/status/request`).  
 **Subscriber:** Der jeweilige Controller (Web, Hardware, Bot) mit passender `controller_id`.
 
@@ -83,7 +83,7 @@ Bei Fehler z. B.:
 
 Vom Backend an jeden in der aktiven Session eingetragenen Controller gesendet (periodisch und vor jeder neuen Frage). Controller müssen mit Pong antworten; ausbleibende Pongs führen zur Markierung als OFFLINE und ggf. zum Ausschluss vor der nächsten Frage.
 
-**Topic:** `group-03/controller/{controller_id}/ping`  
+**Topic:** `quiz-local/controller/{controller_id}/ping`  
 **Publisher:** Backend (HeartbeatManager).  
 **Subscriber:** Der jeweilige Controller.
 
@@ -102,7 +102,7 @@ Vom Backend an jeden in der aktiven Session eingetragenen Controller gesendet (p
 
 Bestätigung, dass der Controller erreichbar ist. Muss auf dem Topic des eigenen Controllers gesendet werden.
 
-**Topic:** `group-03/controller/{controller_id}/pong`  
+**Topic:** `quiz-local/controller/{controller_id}/pong`  
 **Publisher:** Web-Controller, Hardware, Bots.  
 **Subscriber:** Backend.
 
@@ -121,7 +121,7 @@ Bestätigung, dass der Controller erreichbar ist. Muss auf dem Topic des eigenen
 
 Wird vom Hardware-Controller beim Lesen einer RFID-Karte publiziert. Das Backend prüft die UID, führt ggf. einen RFID-Login durch und antwortet auf das controller-spezifische Result-Topic; bei Erfolg wird zusätzlich `auth/rfid-login` für das Frontend publiziert.
 
-**Topic:** `group-03/controller/{controller_id}/rfid/scan`  
+**Topic:** `quiz-local/controller/{controller_id}/rfid/scan`  
 **Publisher:** Hardware-Controller.  
 **Subscriber:** Backend.
 
@@ -138,7 +138,7 @@ Wird vom Hardware-Controller beim Lesen einer RFID-Karte publiziert. Das Backend
 
 Rückmeldung an den Hardware-Controller, ob der RFID-Login erfolgreich war und welcher Spieler zugeordnet wurde.
 
-**Topic:** `group-03/controller/{controller_id}/rfid/result`  
+**Topic:** `quiz-local/controller/{controller_id}/rfid/result`  
 **Publisher:** Backend.  
 **Subscriber:** Hardware-Controller.
 
@@ -167,7 +167,7 @@ Topic für den Ready-Status. Spieler (über ihren Controller) melden, ob sie ber
 
 Setzt den Ready-Status des Spielers, der dem angegebenen Controller zugeordnet ist. Entspricht der HTTP-Route `POST /api/lobby/ready`, wird aber von Controllern (Web, Hardware, Bots) per MQTT genutzt. Backend aktualisiert die DB, publiziert `lobby/updated` und sendet bei „Not Ready“ während COUNTDOWN ggf. einen Countdown-Abbruch (game/state LOBBY).
 
-**Topic:** `group-03/player/ready`  
+**Topic:** `quiz-local/player/ready`  
 **Publisher:** Web-Controller, Hardware-Controller, Bots.  
 **Subscriber:** Backend.
 
@@ -194,7 +194,7 @@ Benachrichtigung, dass sich die Lobby oder die Controller-Liste geändert hat. C
 
 Wird vom Backend publiziert, wenn sich die Lobby oder die Controller-Zuordnung ändert (Join, Leave, Kick, Ready, Reset, Controller registriert, RFID-Login). Enthält keine vollständige Spielerliste; das Frontend nutzt das Signal für Polling (z. B. erneuter Aufruf von `/api/lobby/status`).
 
-**Topic:** `group-03/lobby/updated`  
+**Topic:** `quiz-local/lobby/updated`  
 **Publisher:** Backend.  
 **Subscriber:** Frontend (und ggf. andere Clients).
 
@@ -213,7 +213,7 @@ Optional weitere Felder je nach Anlass (z. B. `controller_id`).
 
 Hinweis, dass sich die Liste der Controller geändert hat (Registrierung, Freigabe). Frontend kann z. B. `/api/controllers/available` erneut aufrufen.
 
-**Topic:** `group-03/controllers/updated`  
+**Topic:** `quiz-local/controllers/updated`  
 **Publisher:** Backend.  
 **Subscriber:** Frontend, ggf. Controller.
 
@@ -236,7 +236,7 @@ Topics für Spielzustand, Countdown, Fragen, Antworten, Auswertung und Timer. Da
 
 Meldet einen Zustandswechsel der aktiven Session (LOBBY, COUNTDOWN, QUESTION, EVALUATION, RESULTS). Wird bei jedem Wechsel vom Backend publiziert. Optional enthält die Nachricht bei RESULTS die Ergebnisliste.
 
-**Topic:** `group-03/game/state`  
+**Topic:** `quiz-local/game/state`  
 **Publisher:** Backend.  
 **Subscriber:** Frontend, Web-Controller, Hardware, Bots.
 
@@ -256,7 +256,7 @@ Mögliche `state`: `LOBBY`, `COUNTDOWN`, `QUESTION`, `EVALUATION`, `RESULTS`. Be
 
 Zählt die Sekunden bis zum Start der ersten Frage (z. B. 3, 2, 1). Wird vom Backend einmal pro Sekunde publiziert, bis der Countdown bei 1 endet; danach folgt der Wechsel zu QUESTION und die erste Frage.
 
-**Topic:** `group-03/game/countdown`  
+**Topic:** `quiz-local/game/countdown`  
 **Publisher:** Backend.  
 **Subscriber:** Frontend, Controller.
 
@@ -276,7 +276,7 @@ Zählt die Sekunden bis zum Start der ersten Frage (z. B. 3, 2, 1). Wird vom B
 
 Enthält die aktuelle Frage (Text, Kategorie, Schwierigkeit, Antwortoptionen A–D) und die Frage-ID. Wird vom Backend beim Übergang zu QUESTION und vor jeder neuen Frage publiziert. Controller und Bots nutzen die Frage-ID für die Antwort (game/answer).
 
-**Topic:** `group-03/game/question`  
+**Topic:** `quiz-local/game/question`  
 **Publisher:** Backend.  
 **Subscriber:** Frontend, Web-Controller, Hardware, Bots.
 
@@ -307,7 +307,7 @@ Enthält die aktuelle Frage (Text, Kategorie, Schwierigkeit, Antwortoptionen A�
 
 Sekunden-Restzeit pro Frage (z. B. 30 bis 0). Wird vom Backend regelmäßig (z. B. jede Sekunde) publiziert. Bei 0 schließt die Frage (Auswertung); spätere Antworten zählen nicht.
 
-**Topic:** `group-03/game/question/timer`  
+**Topic:** `quiz-local/game/question/timer`  
 **Publisher:** Backend.  
 **Subscriber:** Frontend, Controller (für Anzeige).
 
@@ -327,7 +327,7 @@ Sekunden-Restzeit pro Frage (z. B. 30 bis 0). Wird vom Backend regelmäßig (z
 
 Übermittelt die Antwort eines Spielers (oder Bots) auf die aktuelle Frage. Backend prüft Session/Frage, speichert die Antwort mit Zeitstempel und Zeitbucket für die Punkteberechnung. Doppelte Antworten vom gleichen Controller werden abgelehnt (kein zweiter Publish).
 
-**Topic:** `group-03/game/answer`  
+**Topic:** `quiz-local/game/answer`  
 **Publisher:** Web-Controller, Hardware-Controller, Bots.  
 **Subscriber:** Backend.
 
@@ -352,7 +352,7 @@ Sekunden-Restzeit pro Frage (z. B. 30 bis 0). Wird vom Backend regelmäßig (z
 
 Enthält die richtige Option, die Auflösungstexte und pro Spieler das Ergebnis (richtig/falsch, vergebene Punkte, Antwortzeit). Wird vom Backend nach Abschluss einer Frage (Timeout oder alle haben geantwortet) einmal publiziert. Danach folgt nach 3 Sekunden die nächste Frage oder RESULTS.
 
-**Topic:** `group-03/game/evaluation`  
+**Topic:** `quiz-local/game/evaluation`  
 **Publisher:** Backend.  
 **Subscriber:** Frontend, Web-Controller, Hardware.
 
@@ -389,7 +389,7 @@ Enthält die richtige Option, die Auflösungstexte und pro Spieler das Ergebnis 
 
 Wird vom Backend beim Start einer Partie (nach HTTP `POST /api/game/start`) publiziert. Enthält nur ein kurzes Signal; der tatsächliche Zustand steht in `game/state` (COUNTDOWN).
 
-**Topic:** `group-03/game/start`  
+**Topic:** `quiz-local/game/start`  
 **Publisher:** Backend.  
 **Subscriber:** Optional (Frontend/Controller können darauf reagieren).
 
@@ -406,7 +406,7 @@ Wird vom Backend beim Start einer Partie (nach HTTP `POST /api/game/start`) publ
 
 Wird vom Backend beim Beenden einer Partie (z. B. Session-Reset, Lobby-Leave) publiziert. Enthält nur ein Signal; der Zustand wechselt danach typisch zu LOBBY (`game/state`).
 
-**Topic:** `group-03/game/stop`  
+**Topic:** `quiz-local/game/stop`  
 **Publisher:** Backend.  
 **Subscriber:** Optional (Frontend/Controller).
 
@@ -429,7 +429,7 @@ Topic für RFID-Login: Das Frontend kann sich mit dem Token automatisch anmelden
 
 Wird vom Backend nach erfolgreichem RFID-Scan (Topic `controller/{id}/rfid/scan`) publiziert. Enthält das JWT und Nutzerdaten, damit das Frontend den Nutzer automatisch anmelden und z. B. auf die Controller-Seite wechseln kann.
 
-**Topic:** `group-03/auth/rfid-login`  
+**Topic:** `quiz-local/auth/rfid-login`  
 **Publisher:** Backend.  
 **Subscriber:** Frontend.
 
@@ -451,5 +451,5 @@ Das Frontend speichert den Token und kann die Session/Lobby-Ansicht aktualisiere
 
 Diese Topics werden vom Backend bereitgestellt, gehören aber nicht zum Kernablauf des Quiz-Spiels.
 
-- **`group-03/demo/message`** – Backend publiziert: `{ "message": "…" }`. Für Demo-/Testzwecke.
-- **`group-03/game/object/created`** – Backend publiziert: `{ "name": "…" }`. Gehört zur Objekt-CRUD-API (`/api/objects`), nicht zum Quiz.
+- **`quiz-local/demo/message`** – Backend publiziert: `{ "message": "…" }`. Für Demo-/Testzwecke.
+- **`quiz-local/game/object/created`** – Backend publiziert: `{ "name": "…" }`. Gehört zur Objekt-CRUD-API (`/api/objects`), nicht zum Quiz.

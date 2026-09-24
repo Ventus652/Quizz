@@ -13,7 +13,7 @@ public class MqttService {
 
     private static final Logger logger = LoggerFactory.getLogger(MqttService.class);
 
-    final String mqttMessagePrefix = System.getenv("MQTT_MESSAGE_PREFIX") != null ? System.getenv("MQTT_MESSAGE_PREFIX") : "group-03/";
+    final String mqttMessagePrefix = System.getenv("MQTT_MESSAGE_PREFIX") != null ? System.getenv("MQTT_MESSAGE_PREFIX") : "quiz-local/";
 
     public MqttService(MqttClient mqttClient) {
         this.mqttClient = mqttClient;

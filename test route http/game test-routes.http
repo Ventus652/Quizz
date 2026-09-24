@@ -3,10 +3,10 @@
 @contentType = application/json
 
 ### Variables de test (à adapter)
-@hostUsername = lunaa
-@hostPassword = securePassword124
-@otherUsername = mtpc
-@otherPassword = mtpc2005
+@hostUsername = demo_host
+@hostPassword = change-me-demo-password
+@otherUsername = demo_player
+@otherPassword = change-me-demo-password
 
 # ============================================
 # 1) LOGIN TOKENS

@@ -63,6 +63,13 @@ docker-compose.override.yml
 mariadb/mariadb_data/*
 
 # Ignoriere sensitive Dateien
+# Local environment and credentials
+.env
+mqtt_credentials.txt
+arduino/include/secrets.h
+frontend/env.js
+web-controller/env.js
+
 # Mosquitto Passwortdatei
 mosquitto/config/passwordfile
 # Mosquitto Datenbankdateien und Logs
